@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import axios from "axios"; // Used to get request from a certain API
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import "./App.css";
+class App extends React.Component {
+  /* State is like a global object that contains all the most
+   important thing when it comes to the specific component */
+
+  state = { advice: "" };
+  // Every component goes through a lifecycle
+  componentDidMount() {
+    // Lifecycle method
+
+    this.fetchAdvice(); //Call the function
+  }
+
+  fetchAdvice = () => {
+    // A method means that it belongs to  a class
+
+    axios
+      .get("https://api.adviceslip.com/advice")
+      .then((data) => {
+        const { advice } = data.data.slip;
+        this.setState({ advice }); // If it has the same name eg, advice. get rid of second one
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  render() {
+    const { advice } = this.state;
+    return (
+      <div className="app">
+        <div className="card">
+          <h1 className="heading">{advice} </h1>
+        </div>
+        ;
+      </div>
+    );
+  }
 }
-
 export default App;
